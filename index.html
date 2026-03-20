@@ -148,6 +148,7 @@
   .card:nth-child(2) { animation-delay: 0.2s; }
   .card:nth-child(3) { animation-delay: 0.3s; grid-column: 1 / -1; }
   .card:nth-child(4) { animation-delay: 0.4s; grid-column: 1 / -1; }
+  .card:nth-child(5) { animation-delay: 0.5s; grid-column: 1 / -1; }
 
   .card::before {
     content: '';
@@ -161,6 +162,7 @@
   .card:nth-child(2)::before { background: linear-gradient(90deg, var(--amber), transparent); }
   .card:nth-child(3)::before { background: linear-gradient(90deg, var(--purple), transparent); }
   .card:nth-child(4)::before { background: linear-gradient(90deg, var(--green), transparent); }
+  .card:nth-child(5)::before { background: linear-gradient(90deg, var(--rose), transparent); }
 
   .card-header {
     display: flex;
@@ -190,6 +192,7 @@
   .card:nth-child(2) .card-badge { background: #f0a50020; color: var(--amber); border: 1px solid var(--amber-dim); }
   .card:nth-child(3) .card-badge { background: #a060f020; color: var(--purple); border: 1px solid #503080; }
   .card:nth-child(4) .card-badge { background: #30e09020; color: var(--green); border: 1px solid #186040; }
+  .card:nth-child(5) .card-badge { background: #f0406020; color: var(--rose); border: 1px solid #802030; }
 
   .chart-wrap {
     position: relative;
@@ -301,6 +304,45 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* Bug table */
+  .bug-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .bug-table th {
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-dim); padding: 8px 12px; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .bug-table td {
+    font-size: 11px; color: var(--text); padding: 10px 12px;
+    border-bottom: 1px solid #0e1520; vertical-align: middle;
+  }
+  .bug-table tr:last-child td { border-bottom: none; }
+  .bug-table tr:hover td { background: #131d2b; }
+  .pill {
+    display: inline-block; font-size: 9px; font-weight: 600;
+    padding: 3px 8px; border-radius: 20px; text-transform: uppercase;
+    letter-spacing: 0.06em; white-space: nowrap;
+  }
+  .pill-open     { background: #f0406022; color: var(--rose);   border: 1px solid #802030; }
+  .pill-reopen   { background: #f0a50022; color: var(--amber);  border: 1px solid #7a5200; }
+  .pill-resolved { background: #00d4d422; color: var(--cyan);   border: 1px solid var(--cyan-dim); }
+  .pill-feedback { background: #a060f022; color: var(--purple); border: 1px solid #503080; }
+  .pill-high     { background: #f0406018; color: var(--rose);   border: 1px solid #601020; }
+  .pill-medium   { background: #f0a50018; color: var(--amber);  border: 1px solid #604000; }
+  .pill-low      { background: #30e09018; color: var(--green);  border: 1px solid #186040; }
+  .bug-title     { max-width: 520px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Summary row for active bugs */
+  .active-summary {
+    display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .active-chip {
+    flex: 1; min-width: 100px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 18px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .active-chip .av { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; line-height: 1; }
+  .active-chip .al { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
   /* Footer */
   footer {
     margin-top: 48px;
@@ -328,7 +370,7 @@
 
   <header>
     <div class="header-left">
-      <h1>Dashboard <span style="color:var(--green)">Defeitos</span></h1>
+      <h1>Dashboard <span style="color:var(--green)">Defeitos — VRR</span></h1>
       <p>Análise de defeitos — Sprint 07 → Sprint 22</p>
     </div>
     <!-- ── INDICADORES DE RESUMO (header) ─────────────────────────── -->
@@ -421,6 +463,159 @@
       </div>
     </div>
     <!-- ── FIM GRÁFICO 4 ───────────────────────────────────────────── -->
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- GRÁFICO 5: CENÁRIO ATUAL — Bugs ativos (não Closed)           -->
+    <!-- Exibe resumo por status + tabela detalhada de todos os bugs   -->
+    <!-- com status Open, Reopen, Resolved ou Feedback                 -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">⚠ Cenário Atual de Bugs</span>
+        <span class="card-badge">12 ativos</span>
+      </div>
+
+      <!-- Mini indicadores por status -->
+      <div class="active-summary">
+        <div class="active-chip">
+          <span class="av" style="color:var(--rose)">3</span>
+          <span class="al">Open</span>
+        </div>
+        <div class="active-chip">
+          <span class="av" style="color:var(--amber)">5</span>
+          <span class="al">Reopen</span>
+        </div>
+        <div class="active-chip">
+          <span class="av" style="color:var(--cyan)">3</span>
+          <span class="al">Resolved</span>
+        </div>
+        <div class="active-chip">
+          <span class="av" style="color:var(--purple)">1</span>
+          <span class="al">Feedback</span>
+        </div>
+        <div class="active-chip">
+          <span class="av" style="color:var(--rose)">2</span>
+          <span class="al">Sev. HIGH</span>
+        </div>
+        <div class="active-chip">
+          <span class="av" style="color:var(--amber)">7</span>
+          <span class="al">Prio. HIGH</span>
+        </div>
+      </div>
+
+      <!-- Tabela detalhada -->
+      <table class="bug-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Status</th>
+            <th>Severidade</th>
+            <th>Componente</th>
+            <th>Sprint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>46806</td>
+            <td class="bug-title">[WEB] Justificativa da vulnerabilidade não é exibida no modal de clusterização</td>
+            <td><span class="pill pill-open">Open</span></td>
+            <td><span class="pill pill-high">HIGH</span></td>
+            <td>RecommendationRemediation</td>
+            <td>Sprint 22 - Mitigação</td>
+          </tr>
+          <tr>
+            <td>46804</td>
+            <td class="bug-title">[WEB] Não é possível realizar remediação em lote. O sistema exibe mensagem de falha</td>
+            <td><span class="pill pill-open">Open</span></td>
+            <td><span class="pill pill-high">HIGH</span></td>
+            <td>RecommendationRemediation</td>
+            <td>Sprint 22 - Mitigação</td>
+          </tr>
+          <tr>
+            <td>46700</td>
+            <td class="bug-title">[WEB] Texto de explicabilidade das remediações excede o limite de 300 caracteres</td>
+            <td><span class="pill pill-resolved">Resolved</span></td>
+            <td><span class="pill pill-low">LOW</span></td>
+            <td>RecommendationRemediation</td>
+            <td>Sprint 21 - Final</td>
+          </tr>
+          <tr>
+            <td>46698</td>
+            <td class="bug-title">[WEB] O Sistema não retorna mensagem de sucesso ao realizar requisição de remediação em batch</td>
+            <td><span class="pill pill-reopen">Reopen</span></td>
+            <td><span class="pill pill-low">LOW</span></td>
+            <td>RecommendationRemediation</td>
+            <td>Sprint 21 - Final</td>
+          </tr>
+          <tr>
+            <td>46659</td>
+            <td class="bug-title">[WEB] Contadores de criticidade na tela de Servidores não correspondem ao resultado da busca aplicada</td>
+            <td><span class="pill pill-reopen">Reopen</span></td>
+            <td><span class="pill pill-low">LOW</span></td>
+            <td>Servers</td>
+            <td>Sprint 21 - Final</td>
+          </tr>
+          <tr>
+            <td>46645</td>
+            <td class="bug-title">[WEB] Inconsistência na contagem de vulnerabilidades ao aplicar filtro de criticidade (Servidores)</td>
+            <td><span class="pill pill-reopen">Reopen</span></td>
+            <td><span class="pill pill-medium">MEDIUM</span></td>
+            <td>Servers</td>
+            <td>Sprint 21 - Final</td>
+          </tr>
+          <tr>
+            <td>46644</td>
+            <td class="bug-title">[WEB] Inconsistência na contagem de vulnerabilidades ao aplicar filtro de criticidade (Aplicações)</td>
+            <td><span class="pill pill-reopen">Reopen</span></td>
+            <td><span class="pill pill-medium">MEDIUM</span></td>
+            <td>Applications</td>
+            <td>Sprint 21 - Final</td>
+          </tr>
+          <tr>
+            <td>46642</td>
+            <td class="bug-title">[WEB] Inconsistência na contagem de vulnerabilidades ao aplicar filtros por nome e data (Aplicações)</td>
+            <td><span class="pill pill-reopen">Reopen</span></td>
+            <td><span class="pill pill-medium">MEDIUM</span></td>
+            <td>Applications</td>
+            <td>Sprint 21 - Final</td>
+          </tr>
+          <tr>
+            <td>46496</td>
+            <td class="bug-title">[WEB] Divergência entre o número de vulnerabilidades exibidas no gráfico e no modal de detalhes</td>
+            <td><span class="pill pill-feedback">Feedback</span></td>
+            <td><span class="pill pill-low">LOW</span></td>
+            <td>Vulnerabilities</td>
+            <td>Sprint 18</td>
+          </tr>
+          <tr>
+            <td>46452</td>
+            <td class="bug-title">[PERFORMANCE] Melhoria de performance na listagem de vulnerabilidades com múltiplos usuários</td>
+            <td><span class="pill pill-resolved">Resolved</span></td>
+            <td><span class="pill pill-medium">MEDIUM</span></td>
+            <td>Performace</td>
+            <td>Sprint 19</td>
+          </tr>
+          <tr>
+            <td>46449</td>
+            <td class="bug-title">[PERFORMANCE] Melhoria de performance na rota de servidores com múltiplos usuários</td>
+            <td><span class="pill pill-resolved">Resolved</span></td>
+            <td><span class="pill pill-medium">MEDIUM</span></td>
+            <td>Performace</td>
+            <td>Sprint 19</td>
+          </tr>
+          <tr>
+            <td>44598</td>
+            <td class="bug-title">[DOC] Analyze the adjustment comments inserted in the review of the Investigation Report</td>
+            <td><span class="pill pill-open">Open</span></td>
+            <td><span class="pill pill-low">LOW</span></td>
+            <td>Documentação</td>
+            <td>Sprint 07</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- ── FIM GRÁFICO 5 ───────────────────────────────────────────── -->
 
   </div>
 
